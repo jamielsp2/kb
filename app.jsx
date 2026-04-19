@@ -209,7 +209,7 @@ const DbSidebar = ({
 }) => {
   // If DB data available, build runtime CATEGORIES/FOLDERS/TAGS overrides
   const liveCategories = React.useMemo(() => {
-    if (!dbCategories) return CATEGORIES;
+    if (!dbCategories) return window.CATEGORIES || [];
     return dbCategories.map(c => ({
       id: c.id,
       name: c.name,
@@ -219,7 +219,7 @@ const DbSidebar = ({
   }, [dbCategories]);
 
   const liveFolders = React.useMemo(() => {
-    if (!dbFolders || !dbArticles) return FOLDERS;
+    if (!dbFolders || !dbArticles) return window.FOLDERS || [];
     return dbFolders.map(f => ({
       id: f.id,
       name: f.name,
@@ -240,7 +240,7 @@ const DbSidebar = ({
   }, [dbFolders, dbArticles]);
 
   const liveTags = React.useMemo(() => {
-    if (!dbTags) return TAGS;
+    if (!dbTags) return window.TAGS || [];
     return dbTags.map(t => ({ name: t.name, count: parseInt(t.count) || 1 }));
   }, [dbTags]);
 
@@ -278,7 +278,7 @@ const DbSidebar = ({
 // ============ DB-AWARE HOME ============
 const DbHome = ({ onOpen, onCategory, onCreateArticle, dbArticles, dbStats, dbCategories }) => {
   const liveAllArticles = React.useMemo(() => {
-    if (!dbArticles) return window.ALL_ARTICLES;
+    if (!dbArticles) return window.ALL_ARTICLES || [];
     return dbArticles.map(a => ({
       ...a,
       category: a.category_name || 'General',
@@ -330,7 +330,7 @@ const App = () => {
   const [expandedFolders, setExpandedFolders] = React.useState([]);
   const [activeArticleId, setActiveArticleId] = React.useState('');
   const [activeTags, setActiveTags] = React.useState([]);
-  const [favorites, setFavorites] = React.useState(FAVORITES_SEED);
+  const [favorites, setFavorites] = React.useState([]);
   const [searchOpen, setSearchOpen] = React.useState(false);
   const [tweaksOpen,  setTweaksOpen]  = React.useState(false);
   const [createOpen,  setCreateOpen]  = React.useState(false);
@@ -338,12 +338,12 @@ const App = () => {
   const [usersOpen,   setUsersOpen]   = React.useState(false);
 
   // API data
-  const [dbArticles,    setDbArticles]    = React.useState(null);
-  const [dbCategories,  setDbCategories]  = React.useState(null);
-  const [dbFolders,     setDbFolders]     = React.useState(null);
-  const [dbTags,        setDbTags]        = React.useState(null);
+  const [dbArticles,    setDbArticles]    = React.useState(window.ALL_ARTICLES || []);
+  const [dbCategories,  setDbCategories]  = React.useState(window.CATEGORIES || []);
+  const [dbFolders,     setDbFolders]     = React.useState([]);
+  const [dbTags,        setDbTags]        = React.useState([]);
   const [dbStats,       setDbStats]       = React.useState(null);
-  const [currentArticle,setCurrentArticle]= React.useState(CURRENT_ARTICLE);
+  const [currentArticle,setCurrentArticle]= React.useState(window.CURRENT_ARTICLE || null);
   const [apiReady,      setApiReady]      = React.useState(false);
 
   const loadData = React.useCallback(async () => {
@@ -549,8 +549,8 @@ const App = () => {
         <CreateArticleModal
           onClose={() => setCreateOpen(false)}
           onCreated={handleArticleCreated}
-          categories={dbCategories || CATEGORIES}
-          folders={dbFolders || FOLDERS}
+          categories={dbCategories || window.CATEGORIES || []}
+          folders={dbFolders || window.FOLDERS || []}
         />
       )}
 
