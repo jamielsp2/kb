@@ -1,11 +1,12 @@
 #!/bin/bash
-# Atlas KB — Permission Corrector for SQLite
-# Ensures the persistent volume is writable by Apache/PHP
+set -e
 
-echo "Setting permissions for /var/www/html/data..."
+echo "[STARTUP] Checking directory permissions..."
+# Ensure the data directory is writable by Apache
+# We use /var/www/html/data because that is where the volume is mounted
+mkdir -p /var/www/html/data
 chown -R www-data:www-data /var/www/html/data
 chmod -R 775 /var/www/html/data
 
-# Start Apache in the foreground
-echo "Starting Apache..."
-apache2-foreground
+echo "[STARTUP] Permissions set. Starting Apache..."
+exec apache2-foreground

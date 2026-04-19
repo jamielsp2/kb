@@ -13,13 +13,13 @@ RUN a2enmod headers
 # Copy all project files
 COPY . /var/www/html/
 
-# Ensure data directory exists
-RUN mkdir -p /var/www/html/data
-
 # Copy and set up the entrypoint script
-# This script will fix permissions for the SQLite volume at runtime
 COPY entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
+RUN sed -i 's/\r$//' /usr/local/bin/entrypoint.sh \
+    && chmod +x /usr/local/bin/entrypoint.sh
+
+# Ensure data directory exists before starting
+RUN mkdir -p /var/www/html/data && chown -R www-data:www-data /var/www/html/data
 
 # Apache config: allow .htaccess
 RUN echo '<Directory /var/www/html>\n\
