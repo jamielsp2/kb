@@ -13,14 +13,15 @@ RUN a2enmod headers
 # Copy all project files
 COPY . /var/www/html/
 
-# Create data directory and set correct permissions
-# The data directory MUST be writable by the web server (www-data)
-RUN mkdir -p /var/www/html/data \
-    && chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html \
-    && chmod -R 775 /var/www/html/data
+# Ensure data directory exists
+RUN mkdir -p /var/www/html/data
 
-# Apache config: allow .htaccess, enable in the correct dir
+# Copy and set up the entrypoint script
+# This script will fix permissions for the SQLite volume at runtime
+COPY entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Apache config: allow .htaccess
 RUN echo '<Directory /var/www/html>\n\
     AllowOverride All\n\
     Options -Indexes +FollowSymLinks\n\
@@ -39,3 +40,6 @@ session.cookie_samesite = Lax" \
     > /usr/local/etc/php/conf.d/atlas.ini
 
 EXPOSE 80
+
+# Use the script to start the container
+ENTRYPOINT ["entrypoint.sh"]
