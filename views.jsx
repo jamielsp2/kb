@@ -10,12 +10,17 @@ const HERO_STATS = [
 const FAVORITES_SEED = [];
 const RECENT_SEED = [];
 
-const lookupArticle = (id) => ALL_ARTICLES.find(a => a.id === id);
+// Helper to look up article by ID
+const lookupArticle = (id) => (window.ALL_ARTICLES || []).find(a => a.id === id);
 
 // ---------- HOME ----------
-const Home = ({ onOpen, onCategory, onCreateArticle, liveStats, ALL_ARTICLES, CATEGORIES }) => {
-  const featured = ALL_ARTICLES && ALL_ARTICLES.length > 0 ? ALL_ARTICLES[0] : null;
-  const trending = ALL_ARTICLES && ALL_ARTICLES.length > 1 ? ALL_ARTICLES.slice(1, 5) : [];
+const Home = ({ onOpen, onCategory, onCreateArticle, liveStats }) => {
+  // Use the global data injected in data.jsx
+  const articles  = window.ALL_ARTICLES || []; 
+  const categories = window.CATEGORIES || [];
+  
+  const featured = articles.length > 0 ? articles[0] : null;
+  const trending = articles.length > 1 ? articles.slice(1, 5) : [];
 
   const heroStats = liveStats ? [
     { label: 'Artículos',    value: String(liveStats.articles), trend: 'en la base' },
@@ -48,7 +53,7 @@ const Home = ({ onOpen, onCategory, onCreateArticle, liveStats, ALL_ARTICLES, CA
       </section>
 
       {/* CONTENIDO DENTRO DEL HOME */}
-      {(!ALL_ARTICLES || ALL_ARTICLES.length === 0) ? (
+      {(!articles || articles.length === 0) ? (
         <section className="home-section">
           <div className="empty" style={{padding: '60px 20px', background: 'var(--bg-paper)', borderRadius: 'var(--radius-lg)', border: '1px dashed var(--border-color)'}}>
             <div className="empty-ico" style={{opacity: 0.3}}><Icon name="plus" size={40} /></div>
@@ -67,7 +72,7 @@ const Home = ({ onOpen, onCategory, onCreateArticle, liveStats, ALL_ARTICLES, CA
               <h2>Explorar por categoría</h2>
             </div>
             <div className="cat-grid">
-              {CATEGORIES.map((c, i) => (
+              {categories.map((c, i) => (
                 <div key={c.id} className="cat-card" onClick={() => onCategory(c)}>
                   <div className="cat-card-ico"><Icon name={c.icon || 'folder'} size={24} /></div>
                   <div className="cat-card-info">
@@ -127,7 +132,8 @@ const Favorites = ({ favorites, onToggleFav, onOpen }) => {
       <h1 className="view-title">Mis favoritos</h1>
       <div className="fav-grid">
         {favorites.map(f => {
-          const a = ALL_ARTICLES.find(art => art.id === f.article_id);
+          const articles = window.ALL_ARTICLES || [];
+          const a = articles.find(art => art.id === f.article_id);
           if (!a) return null;
           return (
             <div key={f.id} className="fav-card" onClick={() => onOpen(a)}>
@@ -149,8 +155,7 @@ const Favorites = ({ favorites, onToggleFav, onOpen }) => {
 
 // ---------- RECENT ----------
 const Recent = ({ onOpen }) => {
-  // We'll simulate recent for now since we don't have a backend table yet
-  const items = RECENT_SEED;
+  const items = RECENT_SEED || [];
 
   if (items.length === 0) return (
     <div className="view-wrap">
