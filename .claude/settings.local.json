@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sqlite3 *)",
+      "Bash(php *)",
+      "Bash(/c/xampp/php/php.exe *)"
+    ]
+  }
+}

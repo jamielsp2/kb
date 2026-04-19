@@ -29,6 +29,8 @@ const CreateArticleModal = ({ onClose, onCreated, categories, folders }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) { setError('El título y el contenido son obligatorios.'); return; }
+    if (!categoryId) { setError('Debes seleccionar una categoría antes de publicar.'); return; }
+    if (!folderId) { setError('Debes seleccionar una carpeta antes de publicar.'); return; }
     setSaving(true); setError('');
     try {
       const res = await fetch(`${API}?action=create_article`, {
@@ -121,7 +123,7 @@ const CreateArticleModal = ({ onClose, onCreated, categories, folders }) => {
 
               <select value={folderId} onChange={e => setFolderId(e.target.value)}
                 style={{flex: 1, minWidth: 160, padding: '7px 10px', border: '1px solid var(--border)', borderRadius: 'var(--r-sm)', background: 'var(--surface)', color: 'var(--text)', fontSize: 13}}>
-                <option value="">— Carpeta (opcional) —</option>
+                <option value="">— Carpeta —</option>
                 {filteredFolders.map(f => <option key={f.id} value={f.id}>{f.name}</option>)}
               </select>
 
@@ -449,7 +451,7 @@ const App = () => {
               color: full.author_color || 'oklch(0.72 0.15 255)'
             }],
             content_md: full.content_md,
-            sections: sections.length > 0 ? sections : CURRENT_ARTICLE.sections,
+            sections: sections.length > 0 ? sections : (currentArticle?.sections || []),
           });
           setView('article');
           return;

@@ -8,6 +8,7 @@ if (empty($_SESSION['user'])) {
 
 // Dynamic base path — works under /kb/ (XAMPP) or / (Docker/Coolify)
 $basePath = rtrim(dirname($_SERVER['PHP_SELF']), '/');
+$v = @filemtime(__FILE__) ?: '1';
 ?><!doctype html>
 <html lang="es">
 <head>
@@ -40,13 +41,13 @@ window.__ATLAS_USER__ = <?= json_encode([
 <body>
 <div id="root"></div>
 
-<script type="text/babel" src="<?= $basePath ?>/data.jsx"></script>
-<script type="text/babel" src="<?= $basePath ?>/components.jsx"></script>
-<script type="text/babel" src="<?= $basePath ?>/views.jsx"></script>
-<script type="text/babel" src="<?= $basePath ?>/article.jsx"></script>
-<script type="text/babel" src="<?= $basePath ?>/manage.jsx"></script>
-<script type="text/babel" src="<?= $basePath ?>/users.jsx"></script>
-<script type="text/babel" src="<?= $basePath ?>/app.jsx"></script>
+<script type="text/babel" src="<?= $basePath ?>/data.jsx?v=<?= $v ?>"></script>
+<script type="text/babel" src="<?= $basePath ?>/components.jsx?v=<?= $v ?>"></script>
+<script type="text/babel" src="<?= $basePath ?>/views.jsx?v=<?= $v ?>"></script>
+<script type="text/babel" src="<?= $basePath ?>/article.jsx?v=<?= $v ?>"></script>
+<script type="text/babel" src="<?= $basePath ?>/manage.jsx?v=<?= $v ?>"></script>
+<script type="text/babel" src="<?= $basePath ?>/users.jsx?v=<?= $v ?>"></script>
+<script type="text/babel" src="<?= $basePath ?>/app.jsx?v=<?= $v ?>"></script>
 </body>
 </html>
 

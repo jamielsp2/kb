@@ -84,31 +84,6 @@ const Home = ({ onOpen, onCategory, onCreateArticle, liveStats }) => {
             </div>
           </section>
 
-          {/* TRENDING */}
-          {trending.length > 0 && (
-          <section className="home-section">
-            <div className="home-section-head">
-              <h2>Popular ahora</h2>
-            </div>
-            <div className="trending-grid">
-              {trending.map(a => (
-                <div key={a.id} className="trend-card" onClick={() => onOpen(a)}>
-                  <div className="trend-card-meta">
-                    <span className="t-cat">{a.category_name}</span>
-                    <span className="t-time">{a.read_time}</span>
-                  </div>
-                  <div className="trend-card-title">{a.title}</div>
-                  <div className="trend-card-footer">
-                    <div className="a-author">
-                      <div className="a-avatar" style={{background: a.author_color}}>{a.author_initials}</div>
-                      <span>{a.author_name}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-          )}
         </>
       )}
     </div>

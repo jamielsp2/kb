@@ -458,7 +458,6 @@ const Article = ({ article, onDeleted, onUpdated }) => {
         )}
 
         <Feedback />
-        <Related />
       </article>
 
       <TOC article={{ ...article, sections: sectionsToUse }} activeId={activeSection} />
