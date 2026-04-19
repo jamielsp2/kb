@@ -1,6 +1,6 @@
 // ============ APP ROOT ============
 
-const _BASE = window.__ATLAS_BASE__ || '/kb';
+const _BASE = typeof window.__ATLAS_BASE__ !== 'undefined' ? window.__ATLAS_BASE__ : '';
 const API  = _BASE + '/api/index.php';
 
 const TWEAK_DEFAULTS = {

@@ -1,6 +1,6 @@
 // ============ USERS MODAL — Admin only ============
 
-const AUTH_API = (window.__ATLAS_BASE__ || '/kb') + '/api/auth.php';
+const AUTH_API = (window.__ATLAS_BASE__ || '') + '/api/auth.php';
 
 const ROLE_LABELS = {
   admin:        { label: 'Administrador', color: 'oklch(0.5 0.18 30)',  bg: 'oklch(0.96 0.04 30)'  },
