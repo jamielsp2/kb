@@ -1,0 +1,26 @@
+# Dependencies / build artifacts
+node_modules/
+vendor/
+
+# Environment files (NEVER commit real credentials)
+.env
+.env.local
+.env.production
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# XAMPP backup
+index.html.bak
+
+# Tailwind config (not used in this project)
+tailwind.config.js
+
+# Logs
+*.log
+error_log

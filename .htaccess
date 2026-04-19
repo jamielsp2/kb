@@ -1,0 +1,29 @@
+Options -Indexes
+ServerSignature Off
+
+# Redirect / to index.php if not a real file
+DirectoryIndex index.php index.html
+
+# PHP error handling
+php_flag display_errors Off
+php_flag log_errors On
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Cache static assets
+<FilesMatch "\.(css|js|jsx|woff2|png|jpg|svg)$">
+    <IfModule mod_expires.c>
+        ExpiresActive On
+        ExpiresDefault "access plus 7 days"
+    </IfModule>
+</FilesMatch>
+
+# Block direct access to API config
+<FilesMatch "^config\.php$">
+    Require all denied
+</FilesMatch>

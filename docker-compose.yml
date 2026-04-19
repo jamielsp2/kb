@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      # Optional: custom path for the SQLite DB inside the container
+      # DB_PATH: /var/www/html/data/atlas.db
+      APP_URL: http://localhost:8080
+    volumes:
+      # Persistent volume for the database
+      - atlas_data:/var/www/html/data
+
+volumes:
+  atlas_data:
