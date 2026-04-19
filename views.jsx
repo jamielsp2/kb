@@ -1,33 +1,15 @@
 // ============ VIEWS: HOME / FAVORITES / RECENT ============
 
 const HERO_STATS = [
-  { label: 'Artículos',    value: '151', trend: '+12 esta semana' },
-  { label: 'Categorías',   value: '6',   trend: '2 nuevas' },
-  { label: 'Contribuidores', value: '24', trend: '+3 este mes' },
-  { label: 'Actualizado',  value: 'Hoy', trend: new Date().toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'}) },
+  { label: 'Artículos',    value: '0', trend: '-' },
+  { label: 'Categorías',   value: '0', trend: '-' },
+  { label: 'Tags activos', value: '0', trend: '-' },
+  { label: 'Actualizado',  value: '--', trend: '--' },
 ];
 
-const FAVORITES_SEED = [
-  { id: 'a-install-mac', pinned: true,  addedAt: '2 abr',  note: 'Setup inicial del equipo' },
-  { id: 'a-blocks',      pinned: true,  addedAt: '28 mar', note: 'Referencia diaria' },
-  { id: 'a-auth',        pinned: false, addedAt: '15 mar', note: 'Integración con tokens' },
-  { id: 'a-webhooks',    pinned: false, addedAt: '10 mar' },
-  { id: 'a-invite',      pinned: false, addedAt: '8 mar' },
-  { id: 'a-publish',     pinned: false, addedAt: '2 mar',  note: 'Preview social' },
-];
+const FAVORITES_SEED = [];
+const RECENT_SEED = [];
 
-const RECENT_SEED = [
-  { id: 'a-blocks',      at: 'Hace 12 min', progress: 0.72 },
-  { id: 'a-auth',        at: 'Hace 1 h',    progress: 1.0 },
-  { id: 'a-shortcuts',   at: 'Hace 3 h',    progress: 0.35 },
-  { id: 'a-webhooks',    at: 'Ayer, 17:20', progress: 1.0 },
-  { id: 'a-publish',     at: 'Ayer, 11:04', progress: 0.48 },
-  { id: 'a-401',         at: '2 abr',       progress: 1.0 },
-  { id: 'a-create-ws',   at: '30 mar',      progress: 0.9 },
-  { id: 'a-roles',       at: '28 mar',      progress: 0.22 },
-  { id: 'a-github',      at: '24 mar',      progress: 1.0 },
-  { id: 'a-slack',       at: '20 mar',      progress: 0.6 },
-];
 
 const lookupArticle = (id) => ALL_ARTICLES.find(a => a.id === id);
 
@@ -59,25 +41,11 @@ const Home = ({ onOpen, onCategory, onCreateArticle, liveStats }) => {
       <section className="home-hero">
         <div className="hh-bg" />
         <div className="hh-inner">
-          <div className="a-eyebrow"><span className="dot" />Base de conocimiento Atlas</div>
-          <h1 className="hh-title">
-            Todo lo que tu equipo necesita saber, <em>organizado</em>.
+          <div className="a-eyebrow"><span className="dot" />Globetec Technology GROUP</div>
+          <h1 className="hh-title" style={{fontSize: 'calc(var(--fs-2xl) * 1.5)', fontWeight: 800, marginBottom: '2rem'}}>
+            Portal de Conocimiento de Globetec Technology GROUP
           </h1>
-          <p className="hh-sub">
-            {heroStats[0].value} artículos escritos en Markdown, organizados en {heroStats[1].value} categorías.
-            Busca con ⌘K, filtra por tags, o empieza por donde lo dejaste.
-          </p>
-          <div className="hh-cta">
-            <button className="btn-primary" onClick={() => onOpen(featured)}>
-              <Icon name="arrow" size={14} /> Continuar leyendo
-            </button>
-            <button className="btn-ghost"
-              onClick={onCreateArticle}
-              style={{padding: '8px 14px', border: '1px solid rgba(255,255,255,0.3)'}}>
-              <Icon name="plus" size={13} style={{verticalAlign: -2, marginRight: 4}} />
-              Crear artículo
-            </button>
-          </div>
+          {/* Stats moved up to replace description area */}
           <div className="hh-stats">
             {heroStats.map(s => (
               <div key={s.label} className="hh-stat">
