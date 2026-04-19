@@ -213,7 +213,10 @@ const Sidebar = ({
   favCount,
   onManage,
 }) => {
-  const filteredFolders = FOLDERS.filter(f => f.parent === activeCategory);
+  const folders = window.FOLDERS || [];
+  const categories = window.CATEGORIES || [];
+  const tags = window.TAGS || [];
+  const filteredFolders = folders.filter(f => f.parent === activeCategory);
 
   return (
     <aside className="sidebar">
@@ -237,9 +240,9 @@ const Sidebar = ({
       <div className="nav-group">
         <div className="nav-label">
           <span>Categorías</span>
-          <span className="count">{CATEGORIES.length}</span>
+          <span className="count">{categories.length}</span>
         </div>
-        {CATEGORIES.map(c => (
+        {categories.map(c => (
           <div
             key={c.id}
             className={`nav-item ${activeCategory === c.id ? 'active' : ''}`}
@@ -274,10 +277,10 @@ const Sidebar = ({
       <div className="nav-group">
         <div className="nav-label">
           <span>Tags populares</span>
-          <span className="count">{TAGS.length}</span>
+          <span className="count">{tags.length}</span>
         </div>
         <div className="tag-cloud">
-          {TAGS.map(t => (
+          {tags.map(t => (
             <button
               key={t.name}
               className={`tag-pill ${activeTags.includes(t.name) ? 'active' : ''}`}
@@ -311,19 +314,20 @@ const SearchModal = ({ onClose, onPick }) => {
   const [focus, setFocus] = React.useState(0);
 
   const results = React.useMemo(() => {
-    if (!q.trim()) return ALL_ARTICLES.slice(0, 6);
+    const articles = window.ALL_ARTICLES || [];
+    if (!q.trim()) return articles.slice(0, 6);
     const needle = q.toLowerCase();
-    return ALL_ARTICLES
+    return articles
       .filter(a =>
         a.title.toLowerCase().includes(needle) ||
-        a.tags.some(t => t.toLowerCase().includes(needle)) ||
-        a.folder.toLowerCase().includes(needle)
+        (a.tags || []).some(t => t.toLowerCase().includes(needle)) ||
+        (a.folder || '').toLowerCase().includes(needle)
       )
       .slice(0, 8);
   }, [q]);
 
   const categoriesMatch = q.trim()
-    ? CATEGORIES.filter(c => c.name.toLowerCase().includes(q.toLowerCase())).slice(0, 3)
+    ? (window.CATEGORIES || []).filter(c => c.name.toLowerCase().includes(q.toLowerCase())).slice(0, 3)
     : [];
 
   React.useEffect(() => {
@@ -398,7 +402,7 @@ const SearchModal = ({ onClose, onPick }) => {
           <span><span className="k">↑</span> <span className="k">↓</span> navegar</span>
           <span><span className="k">↵</span> abrir</span>
           <span><span className="k">esc</span> cerrar</span>
-          <span style={{marginLeft: 'auto'}}>{ALL_ARTICLES.length} artículos indexados</span>
+          <span style={{marginLeft: 'auto'}}>{(window.ALL_ARTICLES || []).length} artículos indexados</span>
         </div>
       </div>
     </div>
