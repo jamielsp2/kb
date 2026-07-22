@@ -110,6 +110,36 @@ switch ($action) {
         echo json_encode(['success' => true]);
         break;
 
+    // Change password
+    case 'change_password':
+        requireAuth($pdo);
+        $data = json_decode(file_get_contents('php://input'), true);
+        $current = $data['current_password'] ?? '';
+        $new     = $data['new_password'] ?? '';
+
+        if (!$current || !$new) {
+            http_response_code(400);
+            echo json_encode(['error' => 'La contraseña actual y la nueva son requeridas.']);
+            break;
+        }
+        
+        $userId = $_SESSION['user']['id'];
+        $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE id = ?");
+        $stmt->execute([$userId]);
+        $user = $stmt->fetch();
+        
+        if (!$user || !password_verify($current, $user['password_hash'])) {
+            http_response_code(401);
+            echo json_encode(['error' => 'La contraseña actual es incorrecta.']);
+            break;
+        }
+        
+        $newHash = password_hash($new, PASSWORD_DEFAULT);
+        $pdo->prepare("UPDATE users SET password_hash = ? WHERE id = ?")->execute([$newHash, $userId]);
+        
+        echo json_encode(['success' => true]);
+        break;
+
     // List users (admin only)
     case 'users':
         requireAdmin($pdo);

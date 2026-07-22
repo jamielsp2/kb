@@ -47,9 +47,9 @@ const Icon = ({ name, size = 16, stroke = 1.8, className }) => {
 // ============ BRAND + TOPBAR ============
 const Brand = () => (
   <div className="brand">
-    <div className="brand-mark">A</div>
+    <div className="brand-mark">K</div>
     <div style={{display:'flex', flexDirection:'column', lineHeight:1.1}}>
-      <div className="brand-name">Atlas</div>
+      <div className="brand-name">Knowly</div>
       <div className="brand-tag">Knowledge</div>
     </div>
   </div>
@@ -75,7 +75,7 @@ const SearchTrigger = ({ onClick }) => (
   </button>
 );
 
-const Topbar = ({ onSearch, onToggleTweaks, onToggleTheme, theme, crumbs, onCreateArticle, currentUser, onLogout, onManageUsers }) => {
+const Topbar = ({ onSearch, onToggleTweaks, onToggleTheme, theme, crumbs, onCreateArticle, currentUser, onLogout, onManageUsers, onChangePassword }) => {
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
   const u = currentUser || { name: 'Usuario', role: 'viewer', initials: 'US', color: 'var(--accent)' };
 
@@ -146,6 +146,16 @@ const Topbar = ({ onSearch, onToggleTweaks, onToggleTheme, theme, crumbs, onCrea
 
               {/* Menu items */}
               <div style={{ padding: '6px 0' }}>
+                {onChangePassword && (
+                  <button onClick={() => { setUserMenuOpen(false); onChangePassword(); }}
+                    style={{ width: '100%', padding: '9px 16px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13.5, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 10, transition: 'background .1s' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-sunken)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                  >
+                    <Icon name="edit" size={15} style={{ color: 'var(--text-muted)' }} />
+                    Cambiar contraseña
+                  </button>
+                )}
                 {onManageUsers && (
                   <button onClick={() => { setUserMenuOpen(false); onManageUsers(); }}
                     style={{ width: '100%', padding: '9px 16px', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', fontSize: 13.5, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 10, transition: 'background .1s' }}

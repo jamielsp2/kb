@@ -358,4 +358,119 @@ const UsersModal = ({ onClose, currentUser }) => {
   );
 };
 
-Object.assign(window, { UsersModal, AUTH_API });
+// ============ CHANGE PASSWORD MODAL ============
+const ChangePasswordModal = ({ onClose }) => {
+  const [form, setForm] = React.useState({ current: '', newPw: '', confirm: '' });
+  const [msg, setMsg] = React.useState({ text: '', type: '' });
+  const [saving, setSaving] = React.useState(false);
+
+  const flash = (text, type = 'success') => {
+    setMsg({ text, type });
+    setTimeout(() => setMsg({ text: '', type: '' }), 3500);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.current || !form.newPw || !form.confirm) {
+      flash('Completa todos los campos.', 'error'); return;
+    }
+    if (form.newPw !== form.confirm) {
+      flash('La nueva contraseña no coincide.', 'error'); return;
+    }
+    setSaving(true);
+    try {
+      const res = await fetch(`${AUTH_API}?action=change_password`, {
+        method: 'POST', credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          current_password: form.current,
+          new_password: form.newPw
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        flash('Contraseña actualizada correctamente.');
+        setTimeout(onClose, 1500);
+      } else {
+        flash(data.error || 'Error al actualizar contraseña.', 'error');
+      }
+    } catch {
+      flash('Error de conexión.', 'error');
+    }
+    setSaving(false);
+  };
+
+  const inputStyle = {
+    width: '100%', padding: '10px 14px',
+    border: '1px solid var(--border)', borderRadius: 'var(--r-md)',
+    background: 'var(--surface)', color: 'var(--text)',
+    fontSize: 14, fontFamily: 'inherit', outline: 'none',
+    marginBottom: 14
+  };
+
+  return (
+    <div className="search-backdrop" onClick={onClose}>
+      <div className="search-modal" style={{ width: 400, maxWidth: '90vw' }} onClick={e => e.stopPropagation()}>
+        <div className="search-head" style={{ padding: '16px 24px' }}>
+          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--text)' }}>Cambiar contraseña</div>
+          <button className="icon-btn" onClick={onClose}><Icon name="close" size={16} /></button>
+        </div>
+
+        {msg.text && (
+          <div style={{
+            padding: '10px 24px', fontSize: 13,
+            background: msg.type === 'error' ? 'oklch(0.96 0.04 30)' : 'oklch(0.96 0.06 145)',
+            color: msg.type === 'error' ? 'oklch(0.4 0.18 30)' : 'oklch(0.35 0.15 145)',
+            borderBottom: '1px solid var(--border)',
+          }}>
+            {msg.text}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} style={{ padding: 24 }}>
+          <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: 'var(--text-muted)', marginBottom: 6 }}>
+            Contraseña actual
+          </label>
+          <input
+            type="password"
+            value={form.current}
+            onChange={e => setForm(f => ({ ...f, current: e.target.value }))}
+            style={inputStyle}
+            required
+          />
+
+          <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: 'var(--text-muted)', marginBottom: 6 }}>
+            Nueva contraseña
+          </label>
+          <input
+            type="password"
+            value={form.newPw}
+            onChange={e => setForm(f => ({ ...f, newPw: e.target.value }))}
+            style={inputStyle}
+            required
+          />
+
+          <label style={{ display: 'block', fontSize: 13, fontWeight: 500, color: 'var(--text-muted)', marginBottom: 6 }}>
+            Confirmar nueva contraseña
+          </label>
+          <input
+            type="password"
+            value={form.confirm}
+            onChange={e => setForm(f => ({ ...f, confirm: e.target.value }))}
+            style={inputStyle}
+            required
+          />
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
+            <button type="button" className="btn-ghost" onClick={onClose}>Cancelar</button>
+            <button type="submit" className="btn-primary" disabled={saving}>
+              {saving ? 'Guardando...' : 'Guardar contraseña'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+Object.assign(window, { UsersModal, ChangePasswordModal, AUTH_API });

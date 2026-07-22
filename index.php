@@ -1,19 +1,20 @@
 <?php
 session_start();
 if (empty($_SESSION['user'])) {
-    $loginUrl = rtrim(dirname($_SERVER['PHP_SELF']), '/') . '/login.php';
+    $baseDir = str_replace('\\', '/', dirname($_SERVER['PHP_SELF']));
+    $loginUrl = rtrim($baseDir, '/') . '/login.php';
     header('Location: ' . $loginUrl);
     exit;
 }
 
 // Dynamic base path — works under /kb/ (XAMPP) or / (Docker/Coolify)
-$basePath = rtrim(dirname($_SERVER['PHP_SELF']), '/');
+$basePath = rtrim(str_replace('\\', '/', dirname($_SERVER['PHP_SELF'])), '/');
 $v = @filemtime(__FILE__) ?: '1';
 ?><!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<title>Atlas — Base de Conocimiento</title>
+<title>Knowly — Base de Conocimiento</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -338,6 +338,7 @@ const App = () => {
   const [createOpen,  setCreateOpen]  = React.useState(false);
   const [manageOpen,  setManageOpen]  = React.useState(false);
   const [usersOpen,   setUsersOpen]   = React.useState(false);
+  const [passwordOpen,setPasswordOpen]= React.useState(false);
 
   // API data
   const [dbArticles,    setDbArticles]    = React.useState(window.ALL_ARTICLES || []);
@@ -504,6 +505,7 @@ const App = () => {
         currentUser={currentUser}
         onLogout={handleLogout}
         onManageUsers={isAdmin ? () => setUsersOpen(true) : null}
+        onChangePassword={() => setPasswordOpen(true)}
       />
       <DbSidebar
         view={view} setView={setView}
@@ -571,6 +573,8 @@ const App = () => {
           currentUser={currentUser}
         />
       )}
+
+      {passwordOpen && <ChangePasswordModal onClose={() => setPasswordOpen(false)} />}
 
       {tweaksOpen ? (
         <TweaksPanel
